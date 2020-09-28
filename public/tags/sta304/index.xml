@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>STA304 on A Hugo website</title>
+    <link>/tags/sta304/</link>
+    <description>Recent content in STA304 on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 28 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/sta304/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Investigating Relationship between Fatal Outcomes and Age Groups of COVID-19 Cases in Toronto</title>
+      <link>/2020/09/28/investigating-relationship-between-fatal-outcomes-and-age-groups-of-covid-19-cases-in-toronto/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/09/28/investigating-relationship-between-fatal-outcomes-and-age-groups-of-covid-19-cases-in-toronto/</guid>
+      <description>I. Introduction The COVID-19 pandemic is an ongoing pandemic of coronavirus disease 2019 (i.e. COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).[1] The disease was first identified in December 2019 in Wuhan, China,[2] and soon subsequently recognized as a worldwide pandemic. As of 27 September 2020, around 17,000 cases have been reported in Toronto, Canada, resulting in more than 1,000 deaths; more than 15,000 people have recovered.[3]</description>
+    </item>
+    
+  </channel>
+</rss>

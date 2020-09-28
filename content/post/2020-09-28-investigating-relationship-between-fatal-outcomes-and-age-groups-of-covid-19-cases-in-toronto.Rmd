@@ -2,13 +2,13 @@
 title: Investigating Relationship between Fatal Outcomes and Age Groups of COVID-19
   Cases in Toronto
 author: Ziyue Yang
-      # Student Number: 1004804759
 date: '2020-09-28'
 slug: investigating-relationship-between-fatal-outcomes-and-age-groups-of-covid-19-cases-in-toronto
 categories:
-  - STA304
+  - Assignment
 tags:
   - Assignment
+  - STA304
 ---
 
 ```{r setup, include=FALSE}
@@ -181,3 +181,4 @@ The data is collected on a weekly basis, due to the ongoing growth of COVID-19 c
 [3] City of Toronto. (2020, September 25). COVID-19: Status of Cases in Toronto. Retrieved September 28, 2020, from https://www.toronto.ca/home/covid-19/covid-19-latest-city-of-toronto-news/covid-19-status-of-cases-in-toronto/
 
 [4] Open Data Dataset. (n.d.). Retrieved September 27, 2020, from https://open.toronto.ca/dataset/covid-19-cases-in-toronto/
+

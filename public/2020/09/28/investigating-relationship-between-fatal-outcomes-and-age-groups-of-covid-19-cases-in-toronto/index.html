@@ -68,7 +68,7 @@
     <h1 class="article-title">Investigating Relationship between Fatal Outcomes and Age Groups of COVID-19 Cases in Toronto</h1>
 
     
-    <span class="article-date">2020-09-24</span>
+    <span class="article-date">2020-09-28</span>
     
 
     <div class="article-content">
@@ -80,7 +80,8 @@
 <p>The COVID-19 pandemic is an ongoing pandemic of coronavirus disease 2019 (i.e. COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).<sup>[1]</sup> The disease was first identified in December 2019 in Wuhan, China,<sup>[2]</sup> and soon subsequently recognized as a worldwide pandemic. As of 27 September 2020, around 17,000 cases have been reported in Toronto, Canada, resulting in more than 1,000 deaths; more than 15,000 people have recovered.<sup>[3]</sup></p>
 <!-- Abstract? ^ -->
 <p>We obtained a data set from the extracted data reported jointly by the <em>Provincial Communicable Disease Reporting System (iPHIS)</em> and Toronto’s <em>Custom COVID-19 Case Management System (CORES)</em>.<sup>[4]</sup> The data set contains severity information for all confirmed and probable cases reported to and managed by Toronto Public Health since the first case was reported in January 2020.</p>
-<p><strong>Data Set Legend</strong><sup>[4]</sup></p>
+<div id="data-set-legend4" class="section level2">
+<h2>Data Set Legend<sup>[4]</sup></h2>
 <p>The data contains 17,872 observed samples with the following features in columns:</p>
 <ul>
 <li><p><code>Assigned_ID</code>: A unique ID assigned to each individual samples.</p></li>
@@ -96,17 +97,17 @@
 <li>Active: All other cases</li>
 </ul></li>
 </ul>
-<p><strong>TODO</strong></p>
+</div>
 </div>
 <div id="ii.-exploratory-data-analysis" class="section level1">
 <h1>II. Exploratory Data Analysis</h1>
 <!-- Limitations -->
 <!-- The data in this spreadsheet are subject to change as public health investigations into reported cases and continuous quality improvement initiatives are ongoing, and additional cases continue to be reported. The data will be completely refreshed and overwritten on a weekly basis.The data are extracted at 3 PM on the Monday of a given week, and posted by Wednesday. Please note that these numbers may differ from those posted elsewhere, as data are extracted at different times, and from different sources. -->
-<p><img src="/post/2015-07-23-r-rmarkdown_files/figure-html/figures-1.png" width="768" /></p>
+<p><img src="/post/2020-09-28-investigating-relationship-between-fatal-outcomes-and-age-groups-of-covid-19-cases-in-toronto_files/figure-html/figures-1.png" width="1152" /></p>
 <p>Figure 1 illustrates the number of COVID cases in each age groups. The most significant number of samples lie in between ages 20 to 29 years. Although overall, the major number of cases occur between ages 20 years to 59 years, we have discovered an unexpected result (based on distribution) on fatal samples’ distribution.</p>
-<p><img src="/post/2015-07-23-r-rmarkdown_files/figure-html/unnamed-chunk-2-1.png" width="768" />
+<p><img src="/post/2020-09-28-investigating-relationship-between-fatal-outcomes-and-age-groups-of-covid-19-cases-in-toronto_files/figure-html/unnamed-chunk-2-1.png" width="1152" />
 As shown in Figure 2, a remarkable number of deaths had occur in ages 80 and older. We propose that the fatal rates can be significantly higher in older ages.</p>
-<p><img src="/post/2015-07-23-r-rmarkdown_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
+<p><img src="/post/2020-09-28-investigating-relationship-between-fatal-outcomes-and-age-groups-of-covid-19-cases-in-toronto_files/figure-html/unnamed-chunk-3-1.png" width="1152" /></p>
 <p>Figure 3 visually demonstrates the proportion of fatal samples (in red) and resolved samples (in blue) among each age groups. As shown, it seems that the proportion is significantly higher for samples age 70 and older. We will dive into more details in the next section.</p>
 </div>
 <div id="iii.-methods" class="section level1">
