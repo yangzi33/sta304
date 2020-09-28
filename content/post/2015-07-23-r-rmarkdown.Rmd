@@ -59,8 +59,6 @@ The data contains 17,872 observed samples with the following features in columns
     * Where the report date is more than 14 days from symptom onset AND the case is not currently hospitalized.
   * Active: All other cases
 
-**TODO**
-
 # II. Exploratory Data Analysis
 
 <!-- Limitations -->
