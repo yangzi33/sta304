@@ -17,7 +17,7 @@ library(tidyverse)
 library(opendatatoronto)
 
 # Configuring global plot dimensions
-knitr::opts_chunk$set(fig.width=12, fig.height=4.5) 
+knitr::opts_chunk$set(fig.width=9, fig.height=4.5) 
 
 # Get data from Toronto Open Data Portal using 'opendatatoronto' package 
 covid_package <- show_package("64b54586-6180-4485-83eb-81e8fae3b8fe")
