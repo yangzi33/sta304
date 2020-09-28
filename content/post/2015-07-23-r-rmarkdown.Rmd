@@ -1,0 +1,180 @@
+---
+title: "Investigating Relationship between Fatal Outcomes and Age Groups of COVID-19 Cases in Toronto"
+author: "Ziyue Yang"
+        # Student Numner: 1004804759
+date: 2020-09-24T21:13:14-05:00
+abstract: "In this study, we are interested in studying the outcome distributions in various age groups, by investigating the fatal rates for samples in different ages. We use a simple rate calculating method to compute the fatal rate and and make comparisons, among various age groups, "
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+library(opendatatoronto)
+
+# Configuring global plot dimensions
+knitr::opts_chunk$set(fig.width=8, fig.height=4.5) 
+
+# Get data from Toronto Open Data Portal using 'opendatatoronto' package 
+covid_package <- show_package("64b54586-6180-4485-83eb-81e8fae3b8fe")
+covid_package
+ 
+# get all resources for this package
+resources <- list_package_resources("64b54586-6180-4485-83eb-81e8fae3b8fe")
+ 
+# identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
+datastore_resources <- filter(resources, tolower(format) %in% c('csv', 'geojson'))
+ 
+# load the first datastore resource as a sample
+data <- filter(datastore_resources, row_number()==1) %>% get_resource()
+
+# Transform data into data frame
+df <- data.frame(data)
+
+# Select features required
+covid_df <- df %>% select(Assigned_ID, Age.Group, Outcome)
+covid_df
+```
+
+# I. Introduction
+
+The COVID-19 pandemic is an ongoing pandemic of coronavirus disease 2019 (i.e. COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).^[1]^ The disease was first identified in December 2019 in Wuhan, China,^[2]^ and soon subsequently recognized as a worldwide pandemic. As of 27 September 2020, around 17,000 cases have been reported in Toronto, Canada, resulting in more than 1,000 deaths; more than 15,000 people have recovered.^[3]^
+
+<!-- Abstract? ^ -->
+
+We obtained a data set from the extracted data reported jointly by the *Provincial Communicable Disease Reporting System (iPHIS)* and Toronto's *Custom COVID-19 Case Management System (CORES)*.^[4]^ The data set contains severity information for all confirmed and probable cases reported to and managed by Toronto Public Health since the first case was reported in January 2020.
+
+**Data Set Legend**^[4]^
+
+The data contains 17,872 observed samples with the following features in columns:
+
+* `Assigned_ID`: A unique ID assigned to each individual samples.
+
+* `Age.Group`: Age at time of illness. In years, the age group is represented as: ≤19, 20-29, 30-39, 40-49, 50-59, 60-69, 70-79, 80-89, 90+, unknown (blank).
+
+* `Outcome`: 
+  * Fatal: Cases with a fatal outcome reported.
+  * Resolved: Cases not reported as deceased, and who are either:
+    * Reported as 'recovered' OR
+    * Where the report date is more than 14 days from symptom onset AND the case is not currently hospitalized.
+  * Active: All other cases
+
+**TODO**
+
+# II. Exploratory Data Analysis
+
+<!-- Limitations -->
+<!-- The data in this spreadsheet are subject to change as public health investigations into reported cases and continuous quality improvement initiatives are ongoing, and additional cases continue to be reported. The data will be completely refreshed and overwritten on a weekly basis.The data are extracted at 3 PM on the Monday of a given week, and posted by Wednesday. Please note that these numbers may differ from those posted elsewhere, as data are extracted at different times, and from different sources. -->
+
+```{r, include=FALSE}
+
+# Plot variable for age distribution
+# We removed the samples that does not have age groups reported using filter(Age.Group != "NaN")
+age_dist <- covid_df %>% filter(Age.Group != "NaN") %>% ggplot(aes(x=Age.Group)) + geom_bar() + labs(title = "Age Group Distribution", caption = "Figure 1: Distribution of samples, categorized in age groups.") + xlab("Age Groups") 
+
+# Plot variable for fatal in age groups
+# We selected the fatal samples in our dataset and plot it in age groups
+age_fatal <- covid_df %>% filter(Outcome == "FATAL") %>% ggplot(aes(x=Age.Group)) + geom_bar() + labs(title = "Fatal Distribution", caption = "Figure 2: Distribution of fatal samples, categorized in age groups.") + xlab("Age Groups") + ylab("Fatal Count")
+
+# Combined plot
+combined <- covid_df %>% filter(Age.Group != "NaN", Outcome != "ACTIVE") %>% ggplot(aes(x = Age.Group, fill = Outcome)) + geom_bar()
+```
+
+
+```{r figures, echo=FALSE}
+# Plotting age distribution
+age_dist
+```
+
+Figure 1 illustrates the number of COVID cases in each age groups. The most significant number of samples lie in between ages 20 to 29 years. Although overall, the major number of cases occur between ages 20 years to 59 years, we have discovered an unexpected result (based on distribution) on fatal samples' distribution.
+
+```{r, echo=FALSE}
+age_fatal
+```
+As shown in Figure 2, a remarkable number of deaths had occur in ages 80 and older. We propose that the fatal rates can be significantly higher in older ages.
+
+```{r, echo=FALSE}
+combined
+```
+
+Figure 3 visually demonstrates the proportion of fatal samples (in red) and resolved samples (in blue) among each age groups. As shown, it seems that the proportion is significantly higher for samples age 70 and older. We will dive into more details in the next section.
+
+# III. Methods
+
+We calculate the fatal rate for group $K$ using a typical and simple equation
+
+\begin{equation}\label{prop}
+  \frac{\text{Number of Fatal Samples in Age Group } K}{\text{Total Number of Samples in Age Group } K}.
+\end{equation}
+
+Using the equation, we can get the proportion of fatal among all age groups. We have the following table, with each entry is the fatal rate corresponding to each age group (in percentage)
+
+```{r, include=FALSE}
+# Calculating fatal rate of age 19 and younger
+fatal_19_count <- nrow(covid_df %>% filter(Outcome=="FATAL" & Age.Group == "19 and younger"))
+prop_19 <- fatal_19_count / nrow(filter(covid_df, Age.Group == "19 and younger"))
+
+# Calculating fatal rate of age 20 to 29 
+fatal_29_count <- nrow(covid_df %>% filter(Outcome=="FATAL" & Age.Group == "20 to 29 Years"))
+prop_29 <- fatal_29_count / nrow(filter(covid_df, Age.Group == "20 to 29 Years"))
+
+# Calculating fatal rate of age 30 to 39
+fatal_39_count <- nrow(covid_df %>% filter(Outcome=="FATAL" & Age.Group == "30 to 39 Years"))
+prop_39 <- fatal_39_count / nrow(filter(covid_df, Age.Group == "30 to 39 Years"))
+
+# Calculating fatal rate of age 40 to 49 
+fatal_49_count <- nrow(covid_df %>% filter(Outcome=="FATAL" & Age.Group == "40 to 49 Years"))
+prop_49 <- fatal_49_count / nrow(filter(covid_df, Age.Group == "40 to 49 Years"))
+
+# Calculating fatal rate of age 50 to 59
+fatal_59_count <- nrow(covid_df %>% filter(Outcome=="FATAL" & Age.Group == "50 to 59 Years"))
+prop_59 <- fatal_59_count / nrow(filter(covid_df, Age.Group == "50 to 59 Years"))
+
+# Calculating fatal rate of age 60 to 69
+fatal_69_count <- nrow(covid_df %>% filter(Outcome=="FATAL" & Age.Group == "60 to 69 Years"))
+prop_69 <- fatal_69_count / nrow(filter(covid_df, Age.Group == "60 to 69 Years"))
+
+# Calculating fatal rate of age 70 to 79
+fatal_79_count <- nrow(covid_df %>% filter(Outcome=="FATAL" & Age.Group == "70 to 79 Years"))
+prop_79 <- fatal_79_count / nrow(filter(covid_df, Age.Group == "70 to 79 Years"))
+
+# Calculating fatal rate of age 80 to 89
+fatal_89_count <- nrow(covid_df %>% filter(Outcome=="FATAL" & Age.Group == "80 to 89 Years"))
+prop_89 <- fatal_89_count / nrow(filter(covid_df, Age.Group == "80 to 89 Years"))
+
+# Calculating fatal rate of age 80 to 89
+fatal_90_count <- nrow(covid_df %>% filter(Outcome=="FATAL" & Age.Group == "90 and older"))
+prop_90 <- fatal_90_count / nrow(filter(covid_df, Age.Group == "90 and older"))
+
+```
+
+```{r "proportion", include=FALSE}
+prop_table<- data.frame(prop_19, prop_29, prop_39, prop_49, prop_59, prop_69, prop_79, prop_89, prop_90)
+
+prop_table <- prop_table * 100
+
+col_names <- c("19 and younger", "20 to 39 Years", "30 to 49 Years", "50 to 59 Years", "60 to 69 Years", "70 to 79 Years", "80 to 89 Years", "90 and older")
+
+# prop_table <- data.frame(19 and younger=prop[1], 20 to 39 Years=prop[2], 30 to 49 Years=prop[3], 40 to 59 Years=prop[4], 60 to 79 Years=prop[5], 70 to 89 Years=prop[6], 90 and Older=prop[7])
+```
+
+```{r, echo=FALSE}
+prop_table
+```
+For the sample groups of 70 years and older, the least proportion is $19.32\%$, and the highest proportion reaches $34.59\%$. This is significantly higher than the groups below 70 years, where the group with highest fatal rate among all (60 to 69 Years) have rate of $6.01\%$. 
+
+# IV. Limitations
+
+Indeed, our method has a ton of limitations.
+
+The data is collected on a weekly basis, due to the ongoing growth of COVID-19 cases in Toronto. In addition, the number of samples in each sample groups varies, yielding inaccuracies. Futhermore, there exists other lurking variables that we did not include into our data; for instance, the we could include dummy variables indicating whether or not the samples has been hospitalized or been in ICU before the pandemic: they is not included due to my lack of knowledge on statistical methods.
+
+# References
+
+[1] Naming the coronavirus disease (COVID-19) and the virus that causes it. (n.d.). Retrieved September 28, 2020, from https://www.who.int/emergencies/diseases/novel-coronavirus-2019/technical-guidance/naming-the-coronavirus-disease-(covid-2019)-and-the-virus-that-causes-it
+
+[2] Coronavirus very likely of animal origin, no sign of lab manipulation: WHO. (2020, April 21). Retrieved September 28, 2020, from https://www.reuters.com/article/us-health-coronavirus-who-virus-idUSKCN223180
+
+[3] City of Toronto. (2020, September 25). COVID-19: Status of Cases in Toronto. Retrieved September 28, 2020, from https://www.toronto.ca/home/covid-19/covid-19-latest-city-of-toronto-news/covid-19-status-of-cases-in-toronto/
+
+[4] Open Data Dataset. (n.d.). Retrieved September 27, 2020, from https://open.toronto.ca/dataset/covid-19-cases-in-toronto/

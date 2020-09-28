@@ -1,0 +1,70 @@
+---
+title: "Investigating Relationship between Fatal Outcomes and Age Groups of COVID-19 Cases in Toronto"
+author: "Ziyue Yang"
+        # Student Numner: 1004804759
+date: 2020-09-24T21:13:14-05:00
+abstract: "In this study, we are interested in studying the outcome distributions in various age groups, by investigating the fatal rates for samples in different ages. We use a simple rate calculating method to compute the fatal rate and and make comparisons, among various age groups, "
+output: html_document
+---
+
+
+
+<div id="i.-introduction" class="section level1">
+<h1>I. Introduction</h1>
+<p>The COVID-19 pandemic is an ongoing pandemic of coronavirus disease 2019 (i.e. COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).<sup>[1]</sup> The disease was first identified in December 2019 in Wuhan, China,<sup>[2]</sup> and soon subsequently recognized as a worldwide pandemic. As of 27 September 2020, around 17,000 cases have been reported in Toronto, Canada, resulting in more than 1,000 deaths; more than 15,000 people have recovered.<sup>[3]</sup></p>
+<!-- Abstract? ^ -->
+<p>We obtained a data set from the extracted data reported jointly by the <em>Provincial Communicable Disease Reporting System (iPHIS)</em> and Toronto’s <em>Custom COVID-19 Case Management System (CORES)</em>.<sup>[4]</sup> The data set contains severity information for all confirmed and probable cases reported to and managed by Toronto Public Health since the first case was reported in January 2020.</p>
+<p><strong>Data Set Legend</strong><sup>[4]</sup></p>
+<p>The data contains 17,872 observed samples with the following features in columns:</p>
+<ul>
+<li><p><code>Assigned_ID</code>: A unique ID assigned to each individual samples.</p></li>
+<li><p><code>Age.Group</code>: Age at time of illness. In years, the age group is represented as: ≤19, 20-29, 30-39, 40-49, 50-59, 60-69, 70-79, 80-89, 90+, unknown (blank).</p></li>
+<li><p><code>Outcome</code>:</p>
+<ul>
+<li>Fatal: Cases with a fatal outcome reported.</li>
+<li>Resolved: Cases not reported as deceased, and who are either:
+<ul>
+<li>Reported as ‘recovered’ OR</li>
+<li>Where the report date is more than 14 days from symptom onset AND the case is not currently hospitalized.</li>
+</ul></li>
+<li>Active: All other cases</li>
+</ul></li>
+</ul>
+<p><strong>TODO</strong></p>
+</div>
+<div id="ii.-exploratory-data-analysis" class="section level1">
+<h1>II. Exploratory Data Analysis</h1>
+<!-- Limitations -->
+<!-- The data in this spreadsheet are subject to change as public health investigations into reported cases and continuous quality improvement initiatives are ongoing, and additional cases continue to be reported. The data will be completely refreshed and overwritten on a weekly basis.The data are extracted at 3 PM on the Monday of a given week, and posted by Wednesday. Please note that these numbers may differ from those posted elsewhere, as data are extracted at different times, and from different sources. -->
+<p><img src="/post/2015-07-23-r-rmarkdown_files/figure-html/figures-1.png" width="768" /></p>
+<p>Figure 1 illustrates the number of COVID cases in each age groups. The most significant number of samples lie in between ages 20 to 29 years. Although overall, the major number of cases occur between ages 20 years to 59 years, we have discovered an unexpected result (based on distribution) on fatal samples’ distribution.</p>
+<p><img src="/post/2015-07-23-r-rmarkdown_files/figure-html/unnamed-chunk-2-1.png" width="768" />
+As shown in Figure 2, a remarkable number of deaths had occur in ages 80 and older. We propose that the fatal rates can be significantly higher in older ages.</p>
+<p><img src="/post/2015-07-23-r-rmarkdown_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
+<p>Figure 3 visually demonstrates the proportion of fatal samples (in red) and resolved samples (in blue) among each age groups. As shown, it seems that the proportion is significantly higher for samples age 70 and older. We will dive into more details in the next section.</p>
+</div>
+<div id="iii.-methods" class="section level1">
+<h1>III. Methods</h1>
+<p>We calculate the fatal rate for group <span class="math inline">\(K\)</span> using a typical and simple equation</p>
+<p><span class="math display">\[\begin{equation}\label{prop}
+  \frac{\text{Number of Fatal Samples in Age Group } K}{\text{Total Number of Samples in Age Group } K}.
+\end{equation}\]</span></p>
+<p>Using the equation, we can get the proportion of fatal among all age groups. We have the following table, with each entry is the fatal rate corresponding to each age group (in percentage)</p>
+<pre><code>##      prop_19    prop_29    prop_39   prop_49  prop_59  prop_69  prop_79
+## 1 0.07627765 0.03279764 0.03671072 0.3725166 1.323529 6.012135 19.32921
+##    prop_89  prop_90
+## 1 26.71805 34.58781</code></pre>
+<p>For the sample groups of 70 years and older, the least proportion is <span class="math inline">\(19.32\%\)</span>, and the highest proportion reaches <span class="math inline">\(34.59\%\)</span>. This is significantly higher than the groups below 70 years, where the group with highest fatal rate among all (60 to 69 Years) have rate of <span class="math inline">\(6.01\%\)</span>.</p>
+</div>
+<div id="iv.-limitations" class="section level1">
+<h1>IV. Limitations</h1>
+<p>Indeed, our method has a ton of limitations.</p>
+<p>The data is collected on a weekly basis, due to the ongoing growth of COVID-19 cases in Toronto. In addition, the number of samples in each sample groups varies, yielding inaccuracies. Futhermore, there exists other lurking variables that we did not include into our data; for instance, the we could include dummy variables indicating whether or not the samples has been hospitalized or been in ICU before the pandemic: they is not included due to my lack of knowledge on statistical methods.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>[1] Naming the coronavirus disease (COVID-19) and the virus that causes it. (n.d.). Retrieved September 28, 2020, from <a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/technical-guidance/naming-the-coronavirus-disease-(covid-2019)-and-the-virus-that-causes-it" class="uri">https://www.who.int/emergencies/diseases/novel-coronavirus-2019/technical-guidance/naming-the-coronavirus-disease-(covid-2019)-and-the-virus-that-causes-it</a></p>
+<p>[2] Coronavirus very likely of animal origin, no sign of lab manipulation: WHO. (2020, April 21). Retrieved September 28, 2020, from <a href="https://www.reuters.com/article/us-health-coronavirus-who-virus-idUSKCN223180" class="uri">https://www.reuters.com/article/us-health-coronavirus-who-virus-idUSKCN223180</a></p>
+<p>[3] City of Toronto. (2020, September 25). COVID-19: Status of Cases in Toronto. Retrieved September 28, 2020, from <a href="https://www.toronto.ca/home/covid-19/covid-19-latest-city-of-toronto-news/covid-19-status-of-cases-in-toronto/" class="uri">https://www.toronto.ca/home/covid-19/covid-19-latest-city-of-toronto-news/covid-19-status-of-cases-in-toronto/</a></p>
+<p>[4] Open Data Dataset. (n.d.). Retrieved September 27, 2020, from <a href="https://open.toronto.ca/dataset/covid-19-cases-in-toronto/" class="uri">https://open.toronto.ca/dataset/covid-19-cases-in-toronto/</a></p>
+</div>
